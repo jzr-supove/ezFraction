@@ -54,13 +54,8 @@ class Fraction:
         return [round(number * multiplier), multiplier]
 
     def reduce(self, new_obj: bool = False):
-        # gcd = 1
-        # for i in range(2, min(map(lambda x: x if (x >= 0) else -x, self._frac))):
-        #     if not sum(map(lambda x: x % i, self._frac)):
-        #         gcd = i
-
         gcd = math.gcd(*self._frac)
-        reduced = [int(f / gcd) for f in self._frac]
+        reduced = [f // gcd for f in self._frac]
 
         if new_obj:
             return self.create(*reduced)
@@ -93,27 +88,15 @@ class Fraction:
         return value, denominator
 
     def __add__(self, other, op=operator.add):
-
-        if isinstance(other, Fraction):
-            no, do = other._frac
-            ns, ds = self._frac
-            lc = self.lcm(ds, do)
-
-            return self.create(op(ns * (lc/ds), no * (lc/do)), lc).reduce()
         
-        elif isinstance(other, float):
-            no, do = self._to_frac(other)
-            ns, ds = self._frac
-            lc = self.lcm(ds, do)
-
-            return self.create(op(ns * (lc/ds), no * (lc/do)), lc)
-        
-        elif isinstance(other, int):
-            return self.create(op(self.numerator, other * self.denominator),
-                               self.denominator)
-
-        else:
+        if not isinstance(other, (Fraction, float, int)):
             raise TypeError(f"Unsupported type {type(other)}")
+
+        ns, ds = self._frac
+        no, do = other._frac if type(other) is Fraction else self._to_frac(other)
+        lc = self.lcm(ds, do)
+
+        return self.create(op(ns * (lc/ds), no * (lc/do)), lc).reduce()
 
     def __sub__(self, other):
         return self.__add__(other, operator.sub)
@@ -128,9 +111,7 @@ class Fraction:
         if flip:
             no, do = do, no
 
-        res = [ns * no, ds * do]
-        gcd = math.gcd(*res)
-        return self.create(*[f // gcd for f in res])
+        return self.create(ns * no, ds * do).reduce()
 
     def __truediv__(self, other):
         return self.__mul__(other, flip=True)
