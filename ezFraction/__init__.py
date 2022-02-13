@@ -8,7 +8,7 @@ class Fraction:
     decimal:  float
     _frac:    List[int]
 
-    def __init__(self, number: Union[float, int, str], denominator: Union[int, str] = None, reduce: bool = True, rounding: int = 5):
+    def __init__(self, number: Union[float, int, str], denominator: Union[int, str] = None, reduce: bool = True, rounding: Union[int, None] = 5):
         self.rounding = rounding
         if denominator:
             self.decimal = int(number) / int(denominator)
@@ -35,20 +35,25 @@ class Fraction:
     def lcm(x, y):
         return abs(x * y) // math.gcd(x, y)
 
+    def _round(self, n):
+        if self.rounding:
+            return round(n, self.rounding)
+        return n
+
     def _to_frac(self, number: float) -> List[int]:
         int_part = int(number)
-        float_part = round(number - int_part, self.rounding)
+        float_part = self._round(number - int_part)
 
         if float_part == 0:
             return [int_part, 1]
 
         fp_len = 0
         while float_part // 1 != float_part:
-            float_part = round(float_part * 10, self.rounding)
+            float_part = self._round(float_part * 10)
             fp_len += 1
 
         multiplier = 10 ** fp_len
-        return [round(number * multiplier), multiplier]
+        return [int(number * multiplier), multiplier]
 
     def reduce(self, new_obj: bool = False):
         gcd = math.gcd(*self._frac)
