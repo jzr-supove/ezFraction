@@ -4,23 +4,20 @@ from typing import Tuple, Union, List
 
 
 class Fraction:
-    rounding: int = 5
+    rounding: int
     decimal:  float
     _frac:    List[int]
 
-    def __init__(self, number: Union[float, str], reduce: bool = True, rounding: int = 5):
-        self.decimal = float(number)
+    def __init__(self, number: Union[float, int, str], denominator: Union[int, str] = None, reduce: bool = True, rounding: int = 5):
         self.rounding = rounding
-        self._frac = self._to_frac(self.decimal)
+        if denominator:
+            self.decimal = int(number) / int(denominator)
+            self._frac = [int(number), int(denominator)]
+        else:
+            self.decimal = float(number)
+            self._frac = self._to_frac(self.decimal)
         if reduce:
             self.reduce()
-
-    @classmethod
-    def create(cls, numerator: int, denominator: int):
-        obj = cls.__new__(cls)
-        obj.decimal = numerator / denominator
-        obj._frac = [int(numerator), int(denominator)]
-        return obj
 
     @property
     def numerator(self):
@@ -58,14 +55,14 @@ class Fraction:
         reduced = [f // gcd for f in self._frac]
 
         if new_obj:
-            return self.create(*reduced)
+            return Fraction(*reduced)
 
         self._frac = reduced
         return self
 
     def enlarge(self, multiplier: int = 2, new_obj: bool = False):
         if new_obj:
-            return self.create(self._frac[0] * multiplier, self._frac[1] * multiplier)
+            return Fraction(self._frac[0] * multiplier, self._frac[1] * multiplier)
 
         self._frac[0] *= multiplier
         self._frac[1] *= multiplier
@@ -96,7 +93,7 @@ class Fraction:
         no, do = other._frac if type(other) is Fraction else self._to_frac(other)
         lc = self.lcm(ds, do)
 
-        return self.create(op(ns * (lc/ds), no * (lc/do)), lc).reduce()
+        return Fraction(op(ns * (lc/ds), no * (lc/do)), lc)
 
     def __sub__(self, other):
         return self.__add__(other, operator.sub)
@@ -111,7 +108,7 @@ class Fraction:
         if flip:
             no, do = do, no
 
-        return self.create(ns * no, ds * do).reduce()
+        return Fraction(ns * no, ds * do)
 
     def __truediv__(self, other):
         return self.__mul__(other, flip=True)
