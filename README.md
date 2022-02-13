@@ -16,16 +16,42 @@ From source:
 
 ## Usage
 
+Importing and initialization:
+
 ```python3
 from ezFraction import Fraction
-    
+
+# passing string
+Fraction("3.14")        # 157/50
+
+# passing float
+Fraction(1.24)          # 31/25
+
+# passing int
+Fraction(567)           # 567/1
+
+# passing fraction
+Fraction(28, 3)         # 28/3
+```
+
+Properties:
+
+```python3
 frac = Fraction(4.6)
 
 # Properties
 print(frac)             # 23/5
+print(frac.decimal)     # 4.6
 print(frac.numerator)   # 23
 print(frac.denominator) # 5
 print(frac.tuple)       # (23, 5)
+```
+
+By default fractions will be rounded to 5 decimal places, if you want more or less precision you can set different rounding or even switch off the rounding:
+
+```python3
+print(Fraction(3.14))                   # 333333/100000
+print(Fraction(3.14, rounding=None))    # 4166666666666667/1250000000000000
 ```
 
 When initializing `Fraction`, we can set `reduce` to `False` in order to get unreduced fraction:
