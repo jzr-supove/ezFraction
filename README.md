@@ -1,5 +1,13 @@
 # ezFraction
 
+[![Downloads total](https://pepy.tech/badge/ezfraction)](https://pepy.tech/project/ezFraction)
+[![Downloads monthly](https://img.shields.io/pypi/dm/ezfraction.svg)](https://pypi.python.org/pypi/ezFraction)
+[![PyPi Package Version](https://img.shields.io/pypi/v/ezfraction.svg)](https://pypi.python.org/pypi/ezFraction)
+[![PyPi status](https://img.shields.io/pypi/status/ezfraction.svg)](https://pypi.python.org/pypi/ezFraction)
+[![Supported python versions](https://img.shields.io/pypi/pyversions/ezfraction.svg)](https://pypi.python.org/pypi/ezFraction)
+[![Github issues](https://img.shields.io/github/issues/goodeejay/ezfraction.svg)](https://github.com/goodeejay/ezfraction/issues)
+[![MIT License](https://img.shields.io/pypi/l/ezfraction.svg)](https://opensource.org/licenses/MIT)
+
 **ezFraction** is a custom Python module for working with fractions. 
 
 ## Installation
